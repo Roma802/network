@@ -1,0 +1,98 @@
+{% extends "network/layout.html" %}
+{% load social_share %}
+{% load static %}
+
+{% block body %}
+
+    <div class="centered-div"><h4>Your bookmarks</h4></div>
+    <br>
+    {% for post in object_list %}
+      <div class="post-wrapper">
+        <a href="{{ post.author.get_absolute_url }}" class="username">{{ post.author }}</a>
+        <p class="text">{{ post.text }}</p>
+        {% if post.file_media_type == 'video' %}
+            <div >
+                    <video class="embed-responsive-item" controls>
+                        <source src="{{ post.file.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+            </div>
+        {% elif post.file_media_type == 'image' %}
+          <div class="post-container">
+            <img src="{{ post.file.url }}" alt="image" class="framed-image">
+          </div>
+        {% endif %}
+          <br>
+        <p class="created-at">{{ post.created_at }}</p>
+          {% with total_likes=post.like.count users_like=post.like.all %}
+
+          <span class="total">{{ total_likes }}</span>
+
+
+          <a href="#" data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like">
+              {% if request.user not in users_like %}
+                   <img src="{% static 'network/img/like.png' %}" alt="image" class="like-icon">
+                {% else %}
+                    <img src="{% static 'network/img/unlike.png' %}" alt="image" class="like-icon">
+                {% endif %}
+
+          </a>
+          {% endwith %}
+          <a href="{% url 'post_detail' post.pk %}">Comments </a><span class="comments"> {{post.comment_set.all.count}}</span>
+              <div class="add-to-bookmarks-container">
+                  <a href="" data-id="{{ post.pk }}" data-action="{% if post.pk not in bookmarks %}add{% else %}delete{% endif %}" class="favourite-class">
+                      {% if post.pk not in bookmarks %}
+                            <button type="submit" class="add-to-bookmarks-btn">add to bookmarks</button>
+                      {% else %}
+                            <button type="submit" class="add-to-bookmarks-btn">remove from bookmarks</button>
+                      {% endif %}
+                  </a>
+              </div>
+          <br><br>
+          <div class="icons">
+              <img src="{% static 'network/img/telegram2.png' %}" alt="image" class="icon">
+              {% post_to_telegram 'Shared a post with you' post.get_absolute_url  %}
+          </div>
+          <div class="icons">
+              <img src="{% static 'network/img/twitter.png' %}" alt="image" class="icon">
+              {% post_to_twitter 'Shared a post' post.get_absolute_url %}
+          </div>
+          <div class="icons">
+              <img src="{% static 'network/img/facebook2.png' %}" alt="image" class="icon">
+              {% post_to_facebook post.get_absolute_url link_text="Post to Facebook" %}
+          </div>
+
+
+      </div>
+    {% endfor %}
+        <div class="sidebar">
+            <h2>Trends for you</h2>
+            <ul>
+                {% for tag in tags %}
+                    <li><a href="{% url 'index-tag' tag.slug %}">{{tag}}</a></li>
+                        <p><span class="post-count">{{tag.post_count}} posts</span> </p>
+                        <br>
+                {% endfor %}
+            </ul>
+        </div>
+
+
+    <nav class="paginate">
+        <ul>
+
+
+         {% if page_obj.has_previous %}
+            <li><a href="?page={{ page_obj.previous_page_number }}">previous</a></li>
+         {% endif %}
+            <li><a href="?page={{ page_obj.number }}">{{ page_obj.number }}</a></li>
+            {% if page_obj.has_next %}
+                <li><a href="?page={{ page_obj.next_page_number }}">next</a></li>
+            {% endif %}
+
+         </ul>
+    </nav>
+<script type="text/javascript" src="{% static 'network/js/likes.js' %}"></script>
+<script type="text/javascript" src="{% static 'network/js/favourites_bookmarks.js' %}"></script>
+{% endblock %}
+
+

@@ -1,0 +1,130 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% load social_share %}
+
+{% block body %}
+<div class="centered">
+    <div class="user-profile">
+
+    <br>
+    {% if profile.profile_image.url %}
+    <div class="image-profile">
+
+        <img src="{{ profile.profile_image.url }}" alt="Image" class="framed-image">
+        <input type="file" id="profile-image-upload" name="profile_image" style="display: none;">
+
+    </div>
+    {% endif %}
+
+
+
+    <div class="multiline-container">
+        <h4>{{ profile.user.username }}</h4>
+    </div>
+    <p> {% with total_followers=profile.user.followers.count %}
+        <div class="total-followers"><span class="total1">{{ total_followers }}</span> follower{{ total_followers|pluralize }}</div>
+        {% endwith %}
+    </p>
+    {% if user.username != profile.user.username %}
+        <div class="multiline-container">
+        <a href="{% url 'user_follow' %}" data-id="{{ profile.user.id }}"
+           data-action="{% if request.user in profile.user.followers.all %}un{% endif %}follow" class="follow">
+            {% if request.user not in profile.user.followers.all %}
+                <input type="submit" class="user-follow" value="follow" >
+            {% else %}
+                <input type="submit" class="user-follow" value="unfollow" />
+            {% endif %}
+        </a>
+        </div>
+    {% endif %}
+    {% if user.username == profile.user.username %}
+        <div class="multiline-container">
+            <a href="{% url 'user_profile_edit' profile.user.username %}">
+                <input type="submit" class="update-button" value="Update">
+            </a>
+        </div>
+    {% endif %}
+        <br><br>
+    {% if profile.bio %}
+        <div class="multiline-container">
+    <p><strong>Bio: {{ profile.bio }}</strong></p>
+        </div>
+     {% endif %}
+    {% if messages %}
+        <div class="multiline-container">
+            {% for message in messages %}
+            <div class="alert alert-success" role="alert">
+                <p>{{ message }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    </div>
+</div>
+    <br>
+    {% for post in posts %}
+        <div class="post-wrapper">
+          <span class="username">{{ profile.user.username }}:</span>
+
+          <span class="text">{{ post.text }}</span>
+
+            <br>
+            {% if post.file_media_type == 'video' %}
+
+                <video class="embed-responsive-item" controls>
+                    <source src="{{ post.file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
+            {% elif post.file_media_type == 'image' %}
+             <div class="post-container">
+                <img src="{{ post.file.url }}" alt="image" class="framed-image">
+              </div>
+            {% endif %}
+            <br>
+          <span class="created-at">{{ post.created_at }}</span>
+          {% if user.username == profile.user.username %}
+            <div class="icons">
+                <a href="{% url 'post_edit' post.pk %}" class="edit-link">
+                    <img src="{% static 'network/img/edit3.png' %}" alt="image" class="icon">
+                </a>
+                <p>Edit</p>
+            </div>
+            <div class="icons">
+                <a href="{% url 'post_delete' post.pk %}" class="delete-link">
+                    <img src="{% static 'network/img/delete3.png' %}" alt="image" class="icon">
+                </a>
+                <p>Delete</p>
+            </div>
+          {% endif %}
+            <br>
+            {% with total_likes=post.like.count users_like=post.like.all %}
+
+              <span class="total">{{ total_likes }}</span>
+
+
+              <a href="#" data-id="{{ post.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like">
+                  {% if request.user not in users_like %}
+                       <img src="{% static 'network/img/like.png' %}" alt="image" class="like-icon">
+                    {% else %}
+                        <img src="{% static 'network/img/unlike.png' %}" alt="image" class="like-icon">
+                    {% endif %}
+
+              </a>
+          {% endwith %}
+            <span class="comments">{{post.comment_set.all.count}}</span>
+            <a href="{% url 'post_detail' post.pk %}"><img src="{% static 'network/img/comment.png' %}" alt="image" class="like-icon"> </a>
+          <br>
+        </div>
+        {% empty %}
+            <div class="text-container"><p class="styled-text">You haven't created any post yet.</p></div>
+    {% endfor %}
+<script type="text/javascript" src="{% static 'network/js/likes.js' %}"></script>
+<script type="text/javascript" src="{% static 'network/js/follow.js' %}"></script>
+{% endblock %}
+
+
+
+
+
+

@@ -1,0 +1,26 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <div class="centered">
+        <div class="search-container">
+            <form action="{% url 'index' %}" method="get">
+                  {% csrf_token %}
+                  {{ search_form }}
+                  <button type="submit"><i class="fa fa-search">OK</i></button>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <!-- Боковая панель справа -->
+            <h2>Trends for you</h2>
+            <ul>
+                {% for tag in tags %}
+                    <li><a href="{% url 'index-tag' tag.slug %}">{{tag}}</a></li>
+                        <p><span class="post-count">{{tag.post_count}} posts</span> </p>
+                        <br>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

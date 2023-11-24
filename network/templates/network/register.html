@@ -1,0 +1,46 @@
+{% load static %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Social Network{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'network/css/styles.css' %}" rel="stylesheet">
+        <link rel="icon" href="{% static 'network/img/social-media-icon.png' %}">
+    </head>
+<body>
+
+    <h2>Register</h2>
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+    {% if user_form.errors %}
+        <p>{{user_form.errors}}</p>
+    {% endif %}
+    <div class="form-group">
+    <form action="{% url 'register' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ user_form.username }}
+        </div>
+        <div class="form-group">
+            {{ user_form.email }}
+        </div>
+        <div class="form-group">
+            {{ user_form.password1 }}
+        </div>
+        <div class="form-group">
+            {{ user_form.password2 }}
+        </div>
+        {{ user_profile_form.profile_image }}
+        <br><br>
+
+        <button type="submit">Register</button>
+    </form>
+    </div>
+    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+</body>
+</html>

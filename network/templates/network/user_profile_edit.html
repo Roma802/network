@@ -1,0 +1,29 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<div class="centered">
+    <div class="edit-profile">
+     <h1>Edit profile</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ profile_form.as_p }}
+        {{ user_form.as_p }}
+    <input type="submit" class="create-post-submit" value="Update" />
+    </form>
+    <br><br>
+    {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'error' %}
+                    <div class="alert alert-danger" role="alert">
+                        <p>{{ message }}</p>
+                    </div>
+                {% elif message.tags == 'success' %}
+                    <div class="alert alert-success" role="alert">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

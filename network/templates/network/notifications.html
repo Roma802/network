@@ -1,0 +1,32 @@
+{% extends "network/layout.html" %}
+{% load social_share %}
+{% load static %}
+
+{% block body %}
+
+    <div class="centered-div"><h4>Your notifications</h4></div>
+    <br>
+    <div class="centered-div"><h5>New</h5></div>
+    {% for notification in object_list %}
+        {% if notification.is_seen == False %}
+        <div class="notification-container">
+            <div class="notification unread">
+                <p>{{notification.message}}</p>
+            </div>
+        </div>
+    {% endif %}
+    {% endfor %}
+
+    <hr><br>
+    <div class="centered-div"><h5>Read</h5></div>
+    {% for notification in object_list %}
+        {% if notification.is_seen == True %}
+        <div class="notification-container">
+            <div class="notification read">
+                <p>{{notification.message}}</p>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+<script type="text/javascript" src="{% static 'network/js/notification_update.js' %}"></script>
+{% endblock %}

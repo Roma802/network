@@ -1,0 +1,17 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+    <div class="centered">
+        <div class="create-post">
+        <h1>New post</h1>
+        <form action="{% url 'create_post' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ post_form.as_p }}
+            <br><br>
+            <button type="submit" class="create-post-submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

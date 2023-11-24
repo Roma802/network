@@ -1,0 +1,42 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="post-wrapper">
+          <span class="username">{{ post.author }}</span>
+            <br>
+          <span class="text">{{ post.text }}</span>
+            <br>
+            {% if post.file_media_type == 'video' %}
+
+                <video class="embed-responsive-item" controls>
+                    <source src="{{ post.file.url }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
+            {% elif post.file_media_type == 'image' %}
+              <div class="post-container">
+                <img src="{{ post.file.url }}" alt="image" class="framed-image">
+              </div>
+            {% endif %}
+            <br>
+          <span class="created-at">{{ post.created_at }}</span>
+          {% if request.user.username == post.author %}
+            <a href="{% url 'post_edit' post.pk %}" class="edit-link">Edit Post</a>
+          {% endif %}
+            <br><br><hr>
+           <span class="like-count"> Likes: {{ post.like.count }}  Comments: {{post.comment_set.all.count}}</span>
+            <hr>
+            <form action="{% url 'post_detail' post.pk %}" method="post">
+              {% csrf_token %}
+              {{ comment_form }}
+                <button type="submit"><i class="fa fa-search">OK</i></button>
+            </form>
+            {% for comment in comments %}
+                <img src="{{comment.commenter.userprofile.profile_image.url}}" alt="User's image" class="commenter-image"> {{comment.commenter.username}}:{{comment.text}}
+                <br><br>
+            {% endfor %}
+
+          <br>
+    </div>
+{% endblock %}
