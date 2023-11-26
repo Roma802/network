@@ -54,20 +54,13 @@ class Post(models.Model):
 
 @receiver(post_save, sender=Post)
 def handler_post_tags(sender, instance, **kwargs):
-    print('signal #')
     new_text = instance.text.replace('\n', ' ')
     if '#' in instance.text:
-        print('signal 2')
         for i in new_text.split(' '):
-            print(f'{new_text.split(" ")}')
             if i.startswith('#'):
-                print(f'i - {i}')
                 instance.tags.add(i)
     for tag in instance.tags.all():
-        print(f"Tag: {tag.name}")
-        print(f'{new_text.split(" ")} - new_text.split')
         if tag.name not in new_text.split(' '):
-            print('OK')
             instance.tags.remove(tag)
 
 
@@ -120,7 +113,6 @@ class Notification(models.Model):
     def save(self, *args, **kwargs):
         now = timezone.now()
         last_minute = now - datetime.timedelta(seconds=60)
-        print(f'now - {now}, last_minute - {last_minute}, self.timestamp - {self.timestamp}')
         duplicated_actions = Notification.objects.filter(is_seen=self.is_seen, message=self.message,
                                                          user=self.user, timestamp__gte=last_minute)
         if not duplicated_actions:

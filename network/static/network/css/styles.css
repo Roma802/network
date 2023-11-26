@@ -446,8 +446,33 @@ hr {
     font-weight: bold;
 }
 
- h4 {
+h4{
     font-family: 'Arial', sans-serif;
     font-size: 20px;
     text-transform: uppercase;
 }
+
+#box {
+  position: absolute;
+  width: 300px;
+  max-height: 200px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+#box .box-container {
+  max-height: 60px;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+}
+
+#box b {
+  display: block;
+  padding: 5px;
+  margin: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+

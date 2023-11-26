@@ -18,7 +18,7 @@ from taggit.models import Tag
 from .forms import PostForm, CommentForm, CustomUserCreationForm, UserProfileForm, UserForm, SearchForm
 from .models import User, Post, UserProfile, Contact, Comment, Bookmarks, Notification
 import psycopg2
-# from .tasks import update_notifications
+import json
 
 
 def login_view(request):
@@ -127,7 +127,8 @@ class PostListView(LoginRequiredMixin, ListView):
 def explore(request):
     tags = Tag.objects.annotate(post_count=Count('post')).filter(post_count__gt=0)
     search_form = SearchForm()
-    return render(request, 'network/explore_page.html', {'tags': tags, 'search_form': search_form})
+    qs_json = json.dumps(list(set((Post.objects.values_list('text', flat=True).exclude(text='')))))
+    return render(request, 'network/explore_page.html', {'tags': tags, 'search_form': search_form, 'qs_json': qs_json})
 
 
 class PostDetailView(LoginRequiredMixin, DetailView):

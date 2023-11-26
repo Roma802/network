@@ -14,7 +14,8 @@ class PostForm(forms.ModelForm):
         # }
 
     text = forms.CharField(
-        widget=forms.Textarea(attrs={'class': 'text-field-style'})
+        widget=forms.Textarea(attrs={'class': 'text-field-style'}),
+        required=False
     )
 
     file = forms.FileField(
@@ -113,7 +114,7 @@ class UserForm(forms.ModelForm):
 
 class SearchForm(forms.Form):
     query = forms.CharField(label='', max_length=100,
-                            widget=forms.TextInput(attrs={'placeholder': 'Search...'}))
+                            widget=forms.TextInput(attrs={'id': 'search-form', 'placeholder': 'Search...'}))
 
 
 

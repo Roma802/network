@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     <div class="centered">
@@ -9,7 +10,9 @@
                   <button type="submit"><i class="fa fa-search">OK</i></button>
             </form>
         </div>
+        <div id="box"></div>
     </div>
+
     <div class="container">
         <div class="sidebar">
             <!-- Боковая панель справа -->
@@ -23,4 +26,29 @@
             </ul>
         </div>
     </div>
+<script type="text/javascript" src="{% static 'network/js/search.js' %}"></script>
+<script>
+    const data = '{{qs_json}}'
+    const rdata = JSON.parse(data.replace(/&quot;/g, '"').replace(/&#x27;/g, "'"))
+    console.log(rdata)
+
+    const input = document.getElementById('search-form')
+
+
+
+    let filterArray = []
+
+    input.addEventListener('keyup', (e)=>{
+        box.innerHTML = ""
+
+        filterArray = rdata.filter(post=> post.includes(e.target.value))
+        if (filterArray.length > 0){
+            filterArray.map(post=>{
+                const encodedQuery = encodeURIComponent(post);
+                const newUrl = `/index?query=${encodedQuery}`;
+                box.innerHTML += `<div class='box-container'><b><a href="${newUrl}">${post}</a></b></div><br>`
+            })
+        }
+    })
+</script>
 {% endblock %}

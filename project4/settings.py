@@ -136,4 +136,4 @@ INTERNAL_IPS = [
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_SAVE_EVERY_REQUEST = True
