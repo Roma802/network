@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'network',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_social_share',
     'taggit',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -73,7 +75,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'project4.wsgi.application'
-
+ASGI_APPLICATION = 'project4.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -137,3 +139,8 @@ INTERNAL_IPS = [
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 # SESSION_SAVE_EVERY_REQUEST = True
+CHANNELS_LAYERS = {
+  'default': {
+    'BACKEND': 'channels.layers.InMemoryChannelLayer'
+  }
+}

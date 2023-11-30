@@ -152,7 +152,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
             new_comment.commenter = request.user
             new_comment.save()
             if request.user != post.author:
-                Notification.objects.create(user=post.author, message=f"User '{request.user}' commented on your post")
+                Notification.objects.create(user=post.author, message=f"User '{request.user}' commented on your post - {post.pk}")
 
         return redirect('post_detail', pk=post.pk)
 
@@ -162,7 +162,7 @@ def user_profile(request, slug):
     user = get_object_or_404(User, username=slug)
     posts = Post.objects.filter(author=user)
     profile = get_object_or_404(UserProfile, user=user)
-    request.session['unread_notifications'] = Notification.objects.filter(user=request.user, is_seen=False).count()
+    # request.session['unread_notifications'] = Notification.objects.filter(user=request.user, is_seen=False).count()
     return render(request, 'network/user_profile.html',
                   {'profile': profile, 'posts': posts})
 
@@ -268,7 +268,7 @@ def likes(request):
             if action == 'like':
                 post.like.add(request.user)
                 if post.author != request.user:
-                    Notification.objects.create(user=post.author, message=f"User '{request.user}' liked your post")
+                    Notification.objects.create(user=post.author, message=f"User '{request.user}' liked your post - {post.pk}")
             else:
                 post.like.remove(request.user)
             return JsonResponse({'status': 'ok'})
