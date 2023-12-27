@@ -25,6 +25,7 @@
         <div class="total-followers"><span class="total1">{{ total_followers }}</span> follower{{ total_followers|pluralize }}</div>
         {% endwith %}
     </p>
+
     {% if user.username != profile.user.username %}
         <div class="multiline-container">
         <a href="{% url 'user_follow' %}" data-id="{{ profile.user.id }}"
@@ -35,18 +36,21 @@
                 <input type="submit" class="user-follow" value="unfollow" />
             {% endif %}
         </a>
+            <a href="{% url 'chat' profile.user.pk %}">
+                {% csrf_token %}
+                <input type="submit" class="message-button" value="message">
+            </a>
         </div>
-    {% endif %}
-    {% if user.username == profile.user.username %}
+    {% elif user.username == profile.user.username %}
         <div class="multiline-container">
             <a href="{% url 'user_profile_edit' profile.user.username %}">
                 <input type="submit" class="update-button" value="Update">
             </a>
         </div>
     {% endif %}
-        <br><br>
+        <br>
     {% if profile.bio %}
-        <div class="multiline-container">
+        <div class="multiline-container-1">
     <p><strong>Bio: {{ profile.bio }}</strong></p>
         </div>
      {% endif %}
@@ -119,8 +123,11 @@
         {% empty %}
             <div class="text-container"><p class="styled-text">You haven't created any post yet.</p></div>
     {% endfor %}
+
+<div id="user-pk" data-first-user-pk="{{ user.pk }}" data-second-user-pk="{{ profile.user.pk }}"></div>
 <script type="text/javascript" src="{% static 'network/js/likes.js' %}"></script>
 <script type="text/javascript" src="{% static 'network/js/follow.js' %}"></script>
+<script type="text/javascript" src="{% static 'chat/js/create_chat.js' %}"></script>
 {% endblock %}
 
 

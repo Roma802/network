@@ -16,8 +16,11 @@ from channels.routing import ProtocolTypeRouter
 from channels.routing import URLRouter
 
 from django.core.asgi import get_asgi_application
-from django.urls import path
+from django.urls import path, re_path
 
+import chat.routing
+import network.routing
+from chat.consumers import ChatConsumer
 from network.consumers import YourConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project4.settings')
@@ -29,7 +32,10 @@ application = ProtocolTypeRouter({
     'http': application,
     'websocket': AuthMiddlewareStack(
         URLRouter([
-            path('ws', YourConsumer.as_asgi())
-        ])
+    *chat.routing.websocket_urlpatterns,
+    *network.routing.websocket_urlpatterns,
+    # path('ws/<str:chat_name>/', ChatConsumer.as_asgi()),
+    # path('ws', YourConsumer.as_asgi()),
+    ])
     )
 })

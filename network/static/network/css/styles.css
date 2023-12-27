@@ -319,7 +319,19 @@ nav.paginate ul li a:hover {
     border-radius: 5px;
     cursor: pointer;
     margin-top: -500px;
+}
 
+.message-button {
+    background-color: #3498db;
+    color: white;
+    padding: 10px 60px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 120px;
+
+    position: relative;
+    top: -45px;
 }
 
 .total-followers {
@@ -369,6 +381,12 @@ nav.paginate ul li a:hover {
 
 .multiline-container {
     display: grid;
+    height: 30px;
+}
+
+.multiline-container-1 {
+    display: grid;
+    height: 80px;
 }
 
 .add-to-bookmarks-btn {

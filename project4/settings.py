@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_social_share',
     'taggit',
     'channels',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project4.wsgi.application'
 ASGI_APPLICATION = 'project4.asgi.application'
+
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -139,8 +142,16 @@ INTERNAL_IPS = [
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 # SESSION_SAVE_EVERY_REQUEST = True
-CHANNELS_LAYERS = {
-  'default': {
-    'BACKEND': 'channels.layers.InMemoryChannelLayer'
-  }
+# CHANNELS_LAYERS = {
+#   'default': {
+#     'BACKEND': 'channels.layers.InMemoryChannelLayer'
+#   }
+# }
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
 }

@@ -1,0 +1,139 @@
+{% load static chat_tags %}
+
+<head>
+    <title>Social Network</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="{% static 'network/css/styles.css' %}" rel="stylesheet">
+    <link href="{% static 'chat/css/chat_room.css' %}" rel="stylesheet">
+    <link rel="icon" href="{% static 'network/img/social-media-icon.png' %}">
+    <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+</head>
+<body>
+
+     <div class="left-sidebar-chat">
+        <ul>
+            {% for chat in chats_for_user %}
+                {% get_not_request_user chat request.user as chat_user %}
+                {% get_count_of_unread_messages chat chat_user as count_of_messages %}
+            <li class="position-li"><img src="{{chat_user.userprofile.profile_image.url}}" alt="User's image" class="commenter-image">
+                {% if count_of_messages > 0 %}<span class="messages-count" id="messages-count">{{count_of_messages}}</span>{% endif %}
+                    <a href="{% url 'chat' chat_user.pk %}">{{chat_user.username}}
+
+                        <br><p style="font-size: 18px;">{{ chat.get_last_message }}</p></a>
+                </li>
+                <hr><br>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="user-info">
+    <strong> {% if request.user.pk == user.pk %} you {% else %} {{user.username}} {% endif %} </strong>
+
+    <img src="{{user.userprofile.profile_image.url}}" alt="User's image" class="commenter-image">
+        <br>
+        <a href="{% url 'user_profile' user.username %}"><button class="profile-button">Profile</button></a>
+    </div>
+    <div id="chat-area">
+        {% for i in messages %}
+            {% if i.author.username == request.user.username %}
+                <div class="message-container">{{i.author.username}}: {{i.text}}</div>
+            {% else %}
+                <div class="other-message-container">{{i.author.username}}: {{i.text}}</div>
+            {% endif %}
+        {% endfor %}
+    </div>
+    <br>
+     {% if request.user.pk != user.pk %}
+        <form action="#" method="post">
+            {% csrf_token %}
+            <input type="text" id="message" name="message" placeholder="Enter your message..." required>
+            <button id="message-button" type="submit">Send</button>
+        </form>
+     {% else %}
+        <p style="font-weight: bold; font-size: 20px;">You didn't choose to chat with anyone</p>
+    {% endif %}
+
+    <div id="chat-code" data-chat-code="{{ chat.code }}"></div>
+</body>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const chatCode = document.getElementById('chat-code').dataset.chatCode;
+    const sendButton = document.getElementById('message-button');
+    const messageInput = document.getElementById('message');
+    const chatElement = document.getElementById('chat-area');
+    console.log('chatcod', chatCode)
+
+    const socket = new WebSocket(`ws://${window.location.host}/ws/${chatCode}/`);
+
+    function scrollToButton(){
+        chatElement.scrollTop = chatElement.scrollHeight;
+    }
+
+    socket.onopen = function(e) {
+      console.log("Connection opened");
+      scrollToButton();
+    };
+
+    sendButton.onclick = function(e){
+        e.preventDefault();
+        sendMessage();
+    }
+
+    sendButton.onkeyup = function(e){
+        if (e.keyCode == 13){
+            sendMessage();
+        }
+
+    }
+
+    function sendMessage() {
+    if (messageInput.value && messageInput.value.length < 100){
+        socket.send(JSON.stringify({
+            'type': 'message',
+            'username': '{{request.user.username}}',
+            'message': escapeHtml(messageInput.value),
+        }));
+    }
+    else {
+        alert("Message must be filled out and less than 100 symbols");
+    }
+    messageInput.value = '';
+    }
+
+    socket.onmessage = function(e) {
+        console.log('onmessage')
+        renderMessage(JSON.parse(e.data));
+        scrollToButton();
+    };
+
+    function renderMessage(data){
+        if (data.type == 'chat_message'){
+             if (data.username === '{{request.user.username}}') {
+                chatElement.innerHTML += `<div class="message__outer"><div class="message-container">${data.username}: ${data.message}</div></div>`
+             } else {
+                chatElement.innerHTML += `<div class="other-message-container">${data.username}: ${data.message}</div>`
+             }
+
+        }
+    }
+
+    function escapeHtml(unsafe) {
+    return unsafe.replace(/[&<"']/g, match => {
+        switch (match) {
+            case '&':
+                return '&amp;';
+            case '<':
+                return '&lt;';
+            case '"':
+                return '&quot;';
+            case "'":
+                return '&#39;';
+            default:
+                return match;
+        }
+    });
+}
+
+    });
+</script>
+<script type="text/javascript" src="{% static 'chat/js/update_messages.js' %}"></script>

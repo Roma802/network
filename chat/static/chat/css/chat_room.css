@@ -1,0 +1,148 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#message {
+    width: 50%;
+    padding: 12px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    position: fixed;
+    bottom: 30px;
+    left: 30%;
+    background-color: #fff;
+}
+
+
+#message-button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    position: fixed;
+    bottom: 5%;
+    left: 82%;
+    transform: translateX(-50%);
+}
+
+
+button:hover {
+    background-color: #45a049;
+}
+
+.user-info {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.user-info strong {
+    margin-bottom: 8px;
+}
+
+
+.message-container {
+    margin-bottom: 30px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #e6f7ff;
+    margin-right: 70px;
+    height: auto;
+    width: fit-content;
+}
+
+.other-message-container {
+    margin-bottom: 30px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #d3d3d3;
+    margin-left: 770px;
+    width: 250px;
+}
+
+
+
+#chat-area {
+    max-height: 400px;
+    width: 1100px;
+    overflow: auto;
+    position: absolute;
+    top: 300px;
+    left: 580px;
+}
+
+.left-sidebar-chat {
+    position: absolute;
+    left: 50px;
+    width: 300px;
+
+    color: black;
+    padding: 20px;
+    height: 65%;
+}
+
+.left-sidebar-chat ul {
+    list-style: none;
+    padding: 0;
+}
+
+.left-sidebar-chat ul li {
+    margin-bottom: 25px;
+}
+
+.left-sidebar-chat a {
+    text-decoration: none;
+    color: black;
+    font-size: 24px;
+}
+
+.profile-button {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 14px;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-button:hover {
+    background-color: #45a049;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.messages-count {
+    position: absolute;
+    top: 0;
+    left: 30px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 4px 8px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.position-li{
+    position: relative;
+}
+

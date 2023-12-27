@@ -335,6 +335,7 @@ class NotificationListView(LoginRequiredMixin, ListView):
 
     def put(self, request, *args, **kwargs):
         Notification.objects.filter(user=request.user).update(is_seen=True)
+        # print({Notification.objects.filter(is_seen=False)})
         return JsonResponse({'status': 'success'})
 
 

@@ -9,7 +9,7 @@
         <link href="{% static 'network/css/styles.css' %}" rel="stylesheet">
         <link rel="icon" href="{% static 'network/img/social-media-icon.png' %}">
         <script src="//cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
-
+        <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuidv4.min.js"></script>
     </head>
     <body>
 
@@ -50,7 +50,7 @@
             <li><a href="{{ user.get_absolute_url }}"><img src="{% static 'network/img/home2.png' %}" alt="image" class="menu-icon">Home</a></li>
             <li><a href="{% url 'explore' %}"><img src="{% static 'network/img/search.png' %}" alt="image" class="menu-icon">Explore</a></li>
             <li><a href="{% url 'notifications' %}" class="notification-link"><img src="{% static 'network/img/notification.png' %}" alt="image" class="menu-icon" id="notification"> <span id="notif-count"></span>Notifications</a></li>
-            <li><a href="#"><img src="{% static 'network/img/messages.png' %}" alt="image" class="menu-icon">Messages</a></li>
+            <li><a href="{% url 'chat' user.pk %}"><img src="{% static 'network/img/messages.png' %}" alt="image" class="menu-icon"><span id="message-count"></span>Messages</a></li>
             <li><a href="{% url 'index' %}"><img src="{% static 'network/img/lists.png' %}" alt="image" class="menu-icon">All posts</a></li>
             <li><a href="{% url 'bookmarks' %}"><img src="{% static 'network/img/bookmarks.png' %}" alt="image" class="menu-icon">Bookmarks</a></li>
             <li><a href="{% url 'create_post' %}"><img src="{% static 'network/img/create_post.png' %}" alt="image" class="menu-icon">Create Post</a></li>

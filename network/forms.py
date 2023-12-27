@@ -84,6 +84,7 @@ class UserProfileForm(forms.ModelForm):
 
     bio = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'text-field-style'}),
+        max_length=300,
         required = False
     )
 
